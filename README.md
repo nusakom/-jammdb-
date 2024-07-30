@@ -12,3 +12,5 @@
 3.然后将文档上传到GitHub的blog，git add . 然后 git commit -m "Describe the changes you made"最后 git push
 ### 2024/7/29
 阅读论文在附录找到Alien_os的GitHub库[Alien]（https://github.com/nusakom/Alien ）并且克隆到本地。昨天的 riscv64-linux-musl 未安装成功，今天继续完成。
+### 2024/7/30
+网卡驱动掉了，改成arch_linux，用clash for windos成功连上网络。
