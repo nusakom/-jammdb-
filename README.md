@@ -18,11 +18,17 @@
 在ubuntu系统里面浏览器下载riscv64-linux-musl工具链，安装成功。
 ### 2024/8/1
 ubuntu 24.4扩容遇到错误
+
  piix4_smbus 0000:00:07.3: 8HBus Host Controller not enabled!
+
  /dev/sda3: recovering journal
+
  /dev/sda3: clean,881904/2260992 files,8690642/9042944 bl0cks
+
  改成22.4 解决
 ### 2024/8/2
 riscv64-unknown-linux-musl-gcc 工具链没有正确设置路径
+
 riscv64-unknown-linux-musl-gcc:command not found
+
 错了好几天，Gpt没有给我正确答案
