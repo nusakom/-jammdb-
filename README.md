@@ -32,3 +32,9 @@ riscv64-unknown-linux-musl-gcc 工具链没有正确设置路径
 riscv64-unknown-linux-musl-gcc:command not found
 
 错了好几天，Gpt没有给我正确答案
+### 2024/8/3
+安装完riscv64-linux-mul-gcc工具链
+
+riscv64-linux-musl-gcc --version
+
+riscv64-linux-musl-gcc (GCC) 11.2.1 20211120
