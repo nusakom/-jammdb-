@@ -38,3 +38,37 @@ riscv64-unknown-linux-musl-gcc:command not found
 riscv64-linux-musl-gcc --version
 
 riscv64-linux-musl-gcc (GCC) 11.2.1 20211120
+
+## 复现遇到 的问题
+
+-make run- 之后
+输出：
+make[1]: Leaving directory '/home/zty/Alien/user/apps'
+
+make[1]: Entering directory '/home/zty/Alien/user/c_apps'
+
+Building C apps
+
+riscv64-linux-musl-gcc -static -o eventfd_test eventfd_test.c;
+
+/bin/sh: 1: riscv64-linux-musl-gcc: not found
+
+make[1]: *** [Makefile:17: build] Error 127
+
+make[1]: Leaving directory '/home/zty/Alien/user/c_apps'
+
+make: *** [Makefile:122: user] Error 2
+### 2024/8/8
+更新一下新的库
+
+遇到错误
+
+error: could not compile `async_test` (bin "async_test") due to 1 previous error
+
+make[1]: *** [Makefile:16: build] Error 101
+
+make[1]: Leaving directory '/home/zty/Alien/user/musl'
+
+make: *** [Makefile:122: user] Error 2
+
+已经更改config.toml改成自己riscv-mul的地址
