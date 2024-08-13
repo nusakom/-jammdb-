@@ -72,3 +72,10 @@ make[1]: Leaving directory '/home/zty/Alien/user/musl'
 make: *** [Makefile:122: user] Error 2
 
 已经更改config.toml改成自己riscv-mul的地址
+#### 这个错误是修改了工具链，解决方案是把MIPS的工具链都删了，然后重新安装riscv的这个然后重新创建链接就可以成功的编译
+### 2024/8/12
+qume我没意识到之前安装一个6.2版本的，优先权高于7.0
+
+删除后再次编译，成功的把sysinfo，todo，slint，memory-game，printdemo这几个测试软件都通过了
+
+手上没有星光2的开发板就没有继续后续的复现
