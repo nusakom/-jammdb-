@@ -1,4 +1,40 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/8/23
+使用cyclictest进行测试
+
+====== cyclictest NO_STRESS_P1 begin ======
+
+WARN: stat /dev/cpu_dma_latency failed: No such file or directory
+
+T: 0 (    7) P:99 I:1000 C:   1000 Min:     30 Act:   54 Avg:   75 Max:     339
+
+====== cyclictest NO_STRESS_P1 end: success ======
+
+====== cyclictest NO_STRESS_P8 begin ======
+
+WARN: stat /dev/cpu_dma_latency failed: No such file or directory
+
+T: 0 (    7) P:99 I:1000 C:    997 Min:     30 Act:  120 Avg:  108 Max:    1172
+
+T: 1 (    8) P:99 I:1500 C:    667 Min:     30 Act:  995 Avg:  121 Max:     995
+
+T: 2 (    9) P:99 I:2000 C:    500 Min:     29 Act:  159 Avg:   95 Max:     683
+
+T: 3 (   10) P:99 I:2500 C:    400 Min:     31 Act:  156 Avg:  123 Max:    1412
+
+T: 4 (   11) P:99 I:3000 C:    333 Min:     29 Act: 1172 Avg:  145 Max:    1172
+
+T: 5 (   12) P:99 I:3500 C:    286 Min:     32 Act:   42 Avg:  120 Max:     539
+
+T: 6 (   13) P:99 I:4000 C:    250 Min:     30 Act:  486 Avg:   98 Max:    1300
+
+T: 7 (   14) P:99 I:4500 C:    222 Min:     33 Act:  715 Avg:  166 Max:    1129
+
+====== cyclictest NO_STRESS_P8 end: success ======
+
+单线程测试 的延迟表现稳定，最大延迟保持在 339 微秒以内。
+
+多线程测试 中，随着线程数量和周期的增加，系统的最大延迟显著增加，这表明在高负载条件下，系统的实时性会受到影响。最糟糕情况下的最大延迟超过了 1 毫秒（1412 微秒），这在某些实时应用中可能是不可接受的
 
 ### 2024/7/27 
 1,商议确认论文题目《基于 jammdb 数据库的高性能、高可靠的异步文件系统》。
