@@ -1,4 +1,7 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/8/31
+完成 embasscy-cn阅读，写完博客上传到github
+下周任务完成：绿色线程跟future性能对比
 ### 2024/8/24
 完成embassy-cn 0.1.0 第一节阅读 [csdn链接](https://blog.csdn.net/m0_63714693/article/details/141507739?spm=1001.2014.3001.5501)
 明天完成在裸机上异步
