@@ -1,6 +1,12 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/9/1
+从基准测试结果来看，future_example 的性能优于 green_thread_example，其平均执行时间低于 green_thread_example。这可能是因为异步编程模型在处理短时间任务时更为高效，而 Rayon 在创建和管理线程时可能带来了额外的开销。
+
+Rayon: 适用于数据并行任务，当任务的计算量大并且能够充分利用多核处理器时，Rayon 是一个不错的选择。
+Tokio: 适用于需要处理大量异步 I/O 操作的任务。如果应用需要高效的异步操作来提高响应速度，Tokio 是更好的选择。
 ### 2024/8/31
 完成 embasscy-cn阅读，写完博客上传到github
+
 下周任务完成：绿色线程跟future性能对比
 ### 2024/8/24
 完成embassy-cn 0.1.0 第一节阅读 [csdn链接](https://blog.csdn.net/m0_63714693/article/details/141507739?spm=1001.2014.3001.5501)
