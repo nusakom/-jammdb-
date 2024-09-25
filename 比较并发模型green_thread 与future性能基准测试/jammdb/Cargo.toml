@@ -1,0 +1,11 @@
+[package]
+name = "jammdb"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+jammdb = "0.1" 
+tokio = { version = "1", features = ["full"] }
+rand = "0.8"
+thiserror = "1.0"
+indicatif = "0.16"
