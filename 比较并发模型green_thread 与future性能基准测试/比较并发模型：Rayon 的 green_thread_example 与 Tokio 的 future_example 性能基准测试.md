@@ -132,7 +132,7 @@ Elapsed time: 1.5s
 Throughput: 66666.67 inserts per second
 Retrieved key0: 0
 ```
-![jammdb测试](jammdb.png "jammdb测试")
+![alt text](atlas/jammdb.jpg)
 ### 解释
 1. **进度条**：
 1. **插入完成信息**：
