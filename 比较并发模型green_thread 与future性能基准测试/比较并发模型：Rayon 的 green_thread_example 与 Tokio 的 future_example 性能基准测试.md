@@ -152,4 +152,135 @@ Retrieved key0: 0
 - **实时数据处理**：适用于对性能有要求的实时应用场景。
 - **缓存系统**：作为临时存储，快速访问频繁使用的数据。
 - **轻量级应用**：在简单场景中，作为复杂数据库的替代方案。
+## 创建绿色线程和future方法修改的jammdb数据库
+（注：以下的代码示例是使用绿色线程和future方法修改的jammdb数据库，用于比较不同并发模型下的性能。）
+### 绿色线程分析
+在 Rust 中，特别是使用 Tokio 这样的异步运行时时，我们可以看到一种实现“绿色线程”的概念。绿色线程是指在用户空间调度的线程，而不是由操作系统内核调度的线程。以下是对代码中绿色线程实现的分析。
+#### 1. 绿色线程的定义
+绿色线程是由程序运行时管理的，而不是操作系统。这使得它们能够更加轻量，且在执行时不会受到操作系统调度的限制。Tokio 使用这种模型，通过异步任务和事件循环实现绿色线程的功能。
+#### 2. Tokio 的任务调度
+在代码中，使用 `tokio::spawn` 创建异步任务：
+```rust
+let handle = tokio::spawn(async move {
+    let tx = db_clone.tx(true).await.unwrap(); // 获取事务
+    for (key, value) in &batch {
+        tx.put(key.clone(), value.clone()).await; // 异步插入数据
+    }
+    bar_clone.inc(batch.len() as u64); // 更新进度条
+});
+```
+- **异步任务**：每个任务都在 `async move` 块中定义，确保可以在未来某个时刻执行。这样的任务不会立即执行，而是被调度到 Tokio 的调度器中。
+- **非阻塞行为**：`await` 关键字使得任务在等待 I/O 操作（如数据库写入）时能够释放控制权，允许其他任务继续执行。这种设计使得即使在高并发环境中，程序也能高效地利用 CPU 资源。
+#### 3. 绿色线程的优势
+- **高效的资源利用**：由于多个绿色线程共享同一个 OS 线程，它们的上下文切换开销大大降低。这种轻量级的线程实现适合于大量并发任务的场景。
+- **简化编程模型**：程序员不需要管理线程的创建和调度，专注于编写业务逻辑。通过 `async/await` 语法，异步编程变得直观且易于维护。
+- **无阻塞 I/O**：使用绿色线程的 Tokio 允许在执行 I/O 操作时不会阻塞整个程序，从而提高吞吐量和响应速度。
+#### 4. 示例中的绿色线程表现
+在我们的 `main` 函数中，创建了多个异步任务用于批量插入数据：
+```rust
+for batch_start in (0..iterations).step_by(batch_size as usize) {
+    let db_clone = Arc::clone(&db);
+    let bar_clone = bar.clone();
+    let batch: Vec<_> = (batch_start..(batch_start + batch_size).min(iterations))
+        .map(|idx| (format!("key{}", idx), format!("value{}", idx)))
+        .collect(); // 生成批次
 
+    let handle = tokio::spawn(async move {
+        let tx = db_clone.tx(true).await.unwrap(); // 获取事务
+        for (key, value) in &batch {
+            tx.put(key.clone(), value.clone()).await; // 异步插入数据
+        }
+        bar_clone.inc(batch.len() as u64); // 更新进度条
+    });
+
+    handles.push(handle); // 收集任务句柄
+}
+```
+- **批量插入**：通过将插入操作分批执行，每个批次创建一个异步任务，充分利用了绿色线程的调度优势。
+- **并发控制**：`RwLock` 的使用确保在多个任务之间共享数据时的安全性，而绿色线程的非阻塞特性则允许任务在 I/O 操作时切换，避免阻塞其他任务。
+### 总结
+绿色线程通过轻量级的用户空间调度和非阻塞 I/O 操作为 Rust 的异步编程模型提供了强大的支持。通过 Tokio 的异步任务，我们能够高效地管理并发操作，实现高性能的数据库插入和读取。在 JammDB 示例中，绿色线程的实现展示了如何在高并发环境中保持资源利用效率，同时简化程序的复杂性。随着需求的增加，可以进一步扩展功能，提升性能。
+### 分析 JammDB 中 Future 的使用
+在 JammDB 的实现中，Future 的使用是实现异步编程的核心，允许非阻塞的操作和高效的并发管理。
+#### 1. Future 的定义与实现
+**Future 是什么？**
+Future 是一个表示某个值在未来某个时刻可能可用的对象。通过使用 `async` 和 `await`，我们可以将异步代码编写得像同步代码一样直观。
+#### 2. JammDB 中的 Future 方法
+**插入批量数据**
+```rust
+pub async fn insert_batch(&self, pairs: &[(String, String)]) -> Result<(), String> {
+    let mut data = self.data.write().await; // 获取写锁，返回 Future
+    for (key, value) in pairs {
+        data.insert(key.clone(), value.clone());
+    }
+    Ok(())
+}
+```
+- **异步操作**：`insert_batch` 使用 `await` 来等待写锁的获取。这意味着在获取锁的过程中，当前任务会被挂起，其他任务可以继续执行，从而避免了阻塞。
+**获取值**
+```rust
+pub async fn get(&self, key: &str) -> Option<String> {
+    let data = self.data.read().await; // 获取读锁，返回 Future
+    data.get(key).cloned()
+}
+```
+- **非阻塞读取**：在 `get` 方法中，`await` 同样用于获取读锁。通过这种方式，可以在 I/O 操作等待期间保持高效。
+#### 3. 在主函数中使用 Future
+**创建异步任务**
+```rust
+let futures: Vec<_> = (0..(iterations / batch_size)).map(|i| {
+    let db_clone = db.clone();
+    let keys_clone = Arc::clone(&keys);
+
+    async move {
+        let start = (i * batch_size) as usize;
+        let end = (start + batch_size as usize).min(keys_clone.len());
+        let batch = &keys_clone[start..end];
+
+        db_clone.insert_batch(batch).await.unwrap(); // 等待插入完成
+    }
+}).collect();
+```
+- **任务调度**：每个任务在 `async move` 块中定义，使得它们可以被 Tokio 的调度器调度和执行。`await` 使得任务在数据库插入时不会阻塞。
+**等待所有任务完成**
+```rust
+join_all(futures).await; // 等待所有 Future 完成
+```
+- **并发管理**：使用 `join_all` 等待多个 Future 完成，确保所有数据都被插入。
+#### 4. Future 的优势
+- **非阻塞性**：使用 Future 使得程序在等待 I/O 操作时可以继续执行其他任务，提高了资源利用率。
+- **简化代码结构**：通过 `async/await` 语法，编写异步代码变得直观，降低了复杂性。
+- **高效并发**：允许创建大量并发任务而不增加线程的上下文切换开销。
+### 总结
+在 JammDB 的实现中，Future 的使用是核心特性，使得异步编程得以有效实现。通过合理利用 `await`，程序可以在高并发场景下保持良好的性能和响应能力，确保数据操作的效率。Future 的引入，使得 Rust 在处理异步任务时，能够有效地管理资源并提高代码的可读性。
+## 对future和green_thread的基准测试
+为了测量future和绿色线程的性能对比。创建任务的使用多线程并发地向 `JammDB` 数据库插入数据，并且在插入过程中实时更新进度条。
+### 任务功能概述
+1. **数据库初始化**：
+   - 创建一个共享的 `JammDB` 实例，使用 `Arc<Mutex<>>` 来确保在多线程环境中的安全访问。
+2. **多线程数据插入**：
+   - 启动多个线程，每个线程负责插入一系列数据到数据库中。
+   - 每个线程根据其索引和迭代次数生成唯一的键（如 `key0`, `key1` 等），并插入对应的值（简单的整数）。
+3. **进度条更新**：
+   - 使用 `indicatif` 库创建进度条，并在每次成功插入数据后更新进度条，以显示插入的进度。
+4. **吞吐量和响应时间计算**：
+   - 记录插入开始和结束的时间，计算总插入次数、耗时和吞吐量（每秒插入的数量）。
+5. **示例读取操作**：
+   - 在所有插入操作完成后，尝试从数据库中读取一个特定的键（如 `key0`）并输出其值。
+### 代码关键点
+- **线程安全**：使用 `Arc` 和 `Mutex` 确保数据库和进度条在多个线程间的安全共享。
+- **性能监控**：通过 `ProgressBar` 实时显示插入进度，增加用户体验。
+- **吞吐量计算**：提供了性能指标，便于评估数据库在并发插入操作下的表现。
+迭代次数为10000、线程数为10：
+future和green_thread:
+
+迭代次数为10000、线程数为100：
+
+迭代次数为1000000、线程数为100：
+
+迭代次数为1000000、线程数为1000：
+
+迭代次数为10000000、线程数为1000:
+
+## 总结
+future会比绿色线程更快
