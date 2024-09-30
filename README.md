@@ -1,4 +1,43 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/9/30
+下载sled和jammdb在虚拟机上面进行性能对比
+
+sled:https://github.com/spacejam/sled
+
+jammdb:https://github.com/pjtatlow/jammdb
+### 2024/9/28
+#### 8号到28号中间完成的事项：
+这两周的时间尝试过embassy架构的异步驱动，完成对比future和绿色线程的性能比较，以及对smol这些接口对异步接口的影响。
+
+看完基于数据库的文件系统设计与实现论文，了解Alien_os与jammdb的接口。
+
+对Alien_os的事务性有一定的了解，懂得其中ACID属性对实现故障还原有一定的理解。
+
+在阅读论文的过程中，发现了一个有趣的现象：在嵌入式系统中，数据库的事务性对于系统的可靠性和稳定性至关重要。嵌入式系统通常具有资源有限
+
+的特性，例如内存和计算能力，因此需要设计一种能够在资源受限的环境下实现事务性的数据库。
+
+完成一个future与绿色线程的比较作业：[使用green_thread与future的方法对jammdb数据库性能基准测试](-jammdb-/比较并发模型green_thread 
+与future性能基准测试/比较并发模型：Rayon 的 green_thread_example 与 Tokio 的 future_example 性能基准测试.md at main · nusakom/-jammdb- (github.com))根据这个实验总结出使用 Future 提供了更高的性能和更简单的编程体验，尤其在处理大量异步操作时更为显著。绿色线程虽然轻量，但在高并发情况下可能受到操作系统调度的限制，导致性能下降。
+
+#### 在国庆假期结束之前计划
+
+要完成开题报告（目前写到背景）
+
+看完[IntOS: Persistent Embedded Operating System and Language Support for Multi-threaded Intermittent Computing](https://www.usenix.org/conference/osdi24/presentation/wu-yilun)
+
+Int_os的GitHub地址：yiluwusbu/IntOS: Code for OSDI'24 Paper: IntOS: Persistent Embedded Operating System and Language Support for Multi-threaded Intermittent Computing (github.com)
+
+补充实现Alien_os的复现过程的分析，以及之前jammdb与sled在有限空间对比的笔记，春节开源操作系统训练营第三阶段项目6的embassy作业。
+总体路线是：
+
+第一阶段对alien_os的接口异步化；
+
+第二阶段完成文件系统异步化改造（如果有时间会完成同步与异步的动态调节，以及优化内存压缩算法）；
+
+第三阶段使用日志记录（Write-Ahead Logging, WAL）增强原有的故障还原性能；
+
+第四阶段让操作系统每个域都拥有事务性；
 ### 2024/9/26
 ### 使用green_thread与future的方法对jammdb数据库性能基准测试
 ### 对比分析：Future 与 绿色线程
