@@ -307,4 +307,6 @@ async fn main() -> Result<()> {
 为了提升性能，我们采用了 Sled 和 Tokio 构建高性能异步数据库的方案。通过并行的异步任务插入数据，我们的插入操作耗时 622.44ms，与经过修改的 jammdb 数据库相差无几，展现了极佳的性能表现。
 
 在进一步扩大数据量至 10,000,000 条时，Sled 的插入耗时约 7秒，而经过优化的 jammdb 仅需 1.5秒。这表明，尽管 Sled 在较小数据集上表现出色，但在处理大规模数据时，jammdb 的异步处理能力显得更加优越。整体来看，jammdb 在处理高并发和大数据量时具有明显的优势。
-(jammdb的具体内容请查看[使用green_thread与future的方法对jammdb数据库性能基准测试]:(https://github.com/nusakom/-jammdb-/blob/main/%E6%AF%94%E8%BE%83%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8Bgreen_thread%20%E4%B8%8Efuture%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/%E6%AF%94%E8%BE%83%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B%EF%BC%9ARayon%20%E7%9A%84%20green_thread_example%20%E4%B8%8E%20Tokio%20%E7%9A%84%20future_example%20%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95.md))
+
+### 实验对比的jammdb的报告可以查看下面的链接：
+[使用green_thread与future的方法对jammdb数据库性能基准测试]:(https://github.com/nusakom/-jammdb-/blob/main/%E6%AF%94%E8%BE%83%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8Bgreen_thread%20%E4%B8%8Efuture%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/%E6%AF%94%E8%BE%83%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B%EF%BC%9ARayon%20%E7%9A%84%20green_thread_example%20%E4%B8%8E%20Tokio%20%E7%9A%84%20future_example%20%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95.md))
