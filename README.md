@@ -1,4 +1,6 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/10/3
+目前，Embassy 作为异步嵌入式框架，主要支持的芯片和平台是通过各种硬件抽象层（HAL）进行扩展的。星光2（Xingguang 2）是中国自主研发的 RISC-V 处理器，因此 Embassy 对它的支持取决于是否有适配的 RISC-V HAL 或者支持该平台的相关库。不知道embassy有没有星光2的 RISC-V HAL 或相关生态库。
 ### 2024/10/2
 完成开题报告：[面向嵌入式系统的异步接口与事务性机制的协同优化研究](https://github.com/nusakom/-jammdb-/blob/main/%E5%BC%80%E9%A2%98%E6%8A%A5%E5%91%8A/%E5%BC%80%E9%A2%98%E6%8A%A5%E5%91%8A.md)
 
