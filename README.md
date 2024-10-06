@@ -1,5 +1,5 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
-### 2024/10/7
+### 2024/10/6
 对比发现sled比jammdb慢，经过研究我们可以得出以下结论：
 
 - **Sled** 适合需要持久化存储且数据不常变化的应用场景，但在高频写入和并发处理方面可能会受到性能限制。
@@ -7,7 +7,7 @@
 
 在选择数据库时，开发者需要根据具体的应用需求和场景做出权衡。
 
-[持久化 vs 内存：Sled 与 JammDB 的性能比较](/workspaces/-jammdb-/sled与jammdb性能对比/持久化 vs 内存：Sled 与 JammDB 的性能比较.md)
+[持久化 vs 内存：Sled 与 JammDB 的性能比较](https://github.com/nusakom/-jammdb-/blob/main/sled%E4%B8%8Ejammdb%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94/%E6%8C%81%E4%B9%85%E5%8C%96%20vs%20%E5%86%85%E5%AD%98%EF%BC%9ASled%20%E4%B8%8E%20JammDB%20%E7%9A%84%E6%80%A7%E8%83%BD%E6%AF%94%E8%BE%83.md)
 ### 2024/10/4
 jammdb性能好的原因没有明显指出来，只是简单做了一个性能比较，需要进一步研究。
 ### 2024/10/3
