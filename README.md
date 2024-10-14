@@ -1,6 +1,13 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/10/14
+完成IntOS:Persistent Embedded Operating System and Language Support for Multi-threaded Intermittent Computing翻译任务
+
+[IntOS:Persistent Embedded Operating System and Language Support for Multi-threaded Intermittent Computing]:(https://github.com/nusakom/-jammdb-/tree/main/IntOS)
+
+项目库:(https://github.com/yiluwusbu/IntOS)
 ### 2024/10/11
 完成rustlings-blog:(https://github.com/nusakom/rust-rustlings-2024-nusakom-blog)
+
 完成rcore 2024a 的ch3
 ### 2024/10/6
 对比发现sled比jammdb慢，经过研究我们可以得出以下结论：
