@@ -2,6 +2,9 @@
 ### 2024/10/16
 优化开题报告的细节，从事务性的角度细节优化重新制定未来规划
 
+补充向老师的点评到开题报告
+
+完成rcore ch4
 ### 2024/10/14
 完成IntOS:Persistent Embedded Operating System and Language Support for Multi-threaded Intermittent Computing翻译任务
 
