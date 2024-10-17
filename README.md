@@ -1,4 +1,7 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/10/16
+优化开题报告的细节，从事务性的角度细节优化重新制定未来规划
+
 ### 2024/10/14
 完成IntOS:Persistent Embedded Operating System and Language Support for Multi-threaded Intermittent Computing翻译任务
 
