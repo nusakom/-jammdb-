@@ -1,14 +1,23 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
 ### 2024/12/27
-在复现alien过程中遇到
+zty@zty-virtual-machine:~/riscv64-linux-musl-cross/lib/gcc/riscv64-linux-musl/11.2.1$ ln -s /home/zty/riscv64-linux-musl-cross/lib/gcc/riscv64-linux-musl/11.2.1/libgcc.a /home/zty/riscv64-linux-musl-cross/lib/gcc/riscv64-linux-musl/11.2.1/libunwind.a
+
+在复现alien过程中遇到如果这样子还是不能运行，可以尝试把第四行注释掉这样就不会编译标准库的用户程序了，就能正常运行了，可以看下面这个图
+
 ![alt text](ab4c17ef491f9eb02b1c2dfde8b5333.png)
+
 user:
+
 	@echo "Building user apps"
+
 	@make all -C ./user/apps
+
 	@make all -C ./user/c_apps ARCH=riscv64
+
 	# @make all -C ./user/musl
+
 	@echo "Building user apps done"
-需要把第四行注释掉，这样子就能正常运行了
+
 ### 2024/12/26
 完成开题报告的PPT：https://github.com/nusakom/-jammdb-/blob/main/%E5%BC%80%E9%A2%98%E6%8A%A5%E5%91%8A/Sled%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9C%A8ArceOS%E4%B8%8A%E7%9A%84%E7%A7%BB%E6%A4%8D%E4%B8%8E%E5%BA%94%E7%94%A8.pptx
 
