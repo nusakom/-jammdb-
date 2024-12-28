@@ -1,4 +1,13 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/12/28
+再次看论文，查找重点
+![alt text](image-2.png)
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-3.png)
+VFS会先调用DBFS的通用read/write接口，然后DBFS会调用jammdb的put/get操作，获取数据对应的键值对；
+
+目前还没找到这些接口
 ### 2024/12/27
 zty@zty-virtual-machine:~/riscv64-linux-musl-cross/lib/gcc/riscv64-linux-musl/11.2.1$ ln -s /home/zty/riscv64-linux-musl-cross/lib/gcc/riscv64-linux-musl/11.2.1/libgcc.a /home/zty/riscv64-linux-musl-cross/lib/gcc/riscv64-linux-musl/11.2.1/libunwind.a
 
