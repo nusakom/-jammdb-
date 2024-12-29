@@ -1,4 +1,12 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/12/29
+将原来的DBFS克隆并且复现，修改部分代码使得DBFS兼容最近版本的fuse。
+![alt text](ecd7fa29ae2638f032583e1e777b741.png)
+实现了一个dbfs适配了fuse的接口，而fuse是一个实现用户态文件系统的框架，所以现在创建了一个dbfs，并且挂载在dbfs目录上
+
+mdtest这个安装好慢,直接在dbfs里面完成创建文件，删除文件，读写文件这些简单测试
+
+链接：https://github.com/nusakom/dbfs2
 ### 2024/12/28
 再次看论文，查找重点
 ![alt text](image-2.png)
