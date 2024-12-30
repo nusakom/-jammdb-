@@ -5,6 +5,9 @@
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com" #全部空格
 cat ~/.ssh/id_rsa.pub
 ```
+尝试陈林峰的毕设，把已经可以运行的dbfs移植进alien_os，在qemu上面能够运行。
+
+预期春节前完成，移植进内核工作
 ### 2024/12/29
 将原来的DBFS克隆并且复现，修改部分代码使得DBFS兼容最近版本的fuse。
 ![alt text](ecd7fa29ae2638f032583e1e777b741.png)
