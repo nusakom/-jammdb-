@@ -1,4 +1,10 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/12/30
+网络坏了
+```
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com" #全部空格
+cat ~/.ssh/id_rsa.pub
+```
 ### 2024/12/29
 将原来的DBFS克隆并且复现，修改部分代码使得DBFS兼容最近版本的fuse。
 ![alt text](ecd7fa29ae2638f032583e1e777b741.png)
