@@ -1,5 +1,17 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
-### 2024/1/1
+### 2025/1/6
+运行时的 FUSE 错误 `fusermount3: option allow_other only allowed if 'user_allow_other' is set in /etc/fuse.conf`。
+这表明 FUSE 配置未正确启用 `allow_other` 选项。请按以下步骤检查和修改 `/etc/fuse.conf`：
+- 打开配置文件（需要 root 权限）：
+  ```bash
+  sudo nano /etc/fuse.conf
+  ```
+- 确保以下行未被注释：
+  ```plaintext
+  user_allow_other
+  ```
+- 保存后退出，然后重新尝试挂载操作。
+### 2025/1/1
 把DBFS移植到Alien中，是移植在vfs下面，但是遇到这些错误目前没有解决方案
 ![alt text](<屏幕截图 2025-01-02 001325-1.jpg>)
 ### 2024/12/30
