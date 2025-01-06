@@ -1,4 +1,47 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2025/1/7
+遇到了连接不上ssh的情况：
+
+需要删除之前的 SSH 密钥
+```
+rm -f ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.pub
+rm -f ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
+```
+接下来，生成一个新的 SSH 密钥对。
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+按提示操作：
+
+- 选择默认位置来保存密钥（直接按回车）。
+- 如果你不希望给密钥设置密码，可以直接按回车跳过。
+
+公钥默认保存在 `~/.ssh/id_rsa.pub` 文件中。使用以下命令查看并复制公钥内容：
+```
+cat ~/.ssh/id_rsa.pub
+```
+- 将新的公钥添加到 GitHub
+
+   1. 打开 GitHub 网站并登录你的账户。
+   2. 进入 **Settings**（右上角的头像 > **Settings**）。
+   3. 在左侧菜单中选择 **SSH and GPG keys**。
+   4. 点击 **New SSH key** 按钮。
+   5. 在 **Title** 字段输入一个描述性的名称（例如：“My Virtual Machine SSH Key”）。
+   6. 在 **Key** 字段粘贴你刚才复制的公钥内容。
+   7. 点击 **Add SSH key**。
+
+- 完成后，测试是否可以成功连接到 GitHub：
+```bash
+ssh -T git@github.com
+```
+你将看到类似如下输出：
+```
+Hi <username>! You've successfully authenticated, but GitHub does not provide shell access.
+```
+现在，你应该可以通过 SSH 克隆仓库了：
+```
+git clone git@github.com:nusakom/Alien.git
+```
 ### 2025/1/6
 根据错误日志，在构建 fuser crate 时遇到了问题，主要原因是 pkg-config 未正确安装或未被找到。此外，还缺少 fuse 和 fuse3 库的开发头文件。
 以下是解决方法：
