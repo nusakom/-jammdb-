@@ -1,5 +1,16 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
 ### 2025/1/6
+根据错误日志，在构建 fuser crate 时遇到了问题，主要原因是 pkg-config 未正确安装或未被找到。此外，还缺少 fuse 和 fuse3 库的开发头文件。
+以下是解决方法：
+- 安装 pkg-config 工具。
+```
+sudo apt update
+sudo apt install pkg-config
+```
+- 对于 FUSE 3：
+```
+sudo apt install libfuse3-dev
+```
 运行时的 FUSE 错误 `fusermount3: option allow_other only allowed if 'user_allow_other' is set in /etc/fuse.conf`。
 这表明 FUSE 配置未正确启用 `allow_other` 选项。请按以下步骤检查和修改 `/etc/fuse.conf`：
 - 打开配置文件（需要 root 权限）：
