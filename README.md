@@ -1,5 +1,73 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
 ### 2024/1/12
+基本思路
+定义 DBFS 接口： 在 DBFS 中，定义通用的 read 和 write 接口来与数据库交互。这些接口会处理实际的数据库操作（例如读取/写入记录、查询等）。
+
+实现 VFS 调用 DBFS 接口： VFS 中的 read 和 write 操作会首先通过 FUSE 接口传递给用户空间的 DBFS 文件系统，然后由 DBFS 执行相应的数据库操作。
+
+下面是Alien的read/write接口，在subsystems/vfs/src/kfile.rs
+```
+// 定义 File trait，描述文件操作的接口
+pub trait File: DowncastSync + Debug {
+    // 读取文件数据
+    fn read(&self, buf: &mut [u8]) -> AlienResult<usize>;        
+    // 写入文件数据
+    fn write(&self, buf: &[u8]) -> AlienResult<usize>;           
+    // 从指定偏移量读取数据（默认未实现）
+    fn read_at(&self, _offset: u64, _buf: &mut [u8]) -> AlienResult<usize> {
+        Err(LinuxErrno::ENOSYS) // 返回未实现错误
+    }
+    // 从指定偏移量写入数据（默认未实现）
+    fn write_at(&self, _offset: u64, _buf: &[u8]) -> AlienResult<usize> {
+        Err(LinuxErrno::ENOSYS) // 返回未实现错误
+    }
+    // 刷新文件缓冲区（默认不执行任何操作）
+    fn flush(&self) -> AlienResult<()> {
+        Ok(())
+    }
+    // 将缓冲区内容同步到存储设备（默认不执行任何操作）
+    fn fsync(&self) -> AlienResult<()> {
+        Ok(())
+    }
+    // 调整文件指针的位置
+    fn seek(&self, pos: SeekFrom) -> AlienResult<u64>;           
+    // 获取文件的元数据属性
+    fn get_attr(&self) -> AlienResult<VfsFileStat>;             
+    // 控制文件的特定功能（默认未实现）
+    fn ioctl(&self, _cmd: u32, _arg: usize) -> AlienResult<usize> {
+        Err(LinuxErrno::ENOSYS) // 返回未实现错误
+    }
+    // 设置文件的打开标志
+    fn set_open_flag(&self, _flag: OpenFlags) {}
+    // 获取文件的打开标志（默认为只读）
+    fn get_open_flag(&self) -> OpenFlags {
+        OpenFlags::O_RDONLY
+    }
+    // 获取文件的目录项
+    fn dentry(&self) -> Arc<dyn VfsDentry>;
+    // 获取文件的索引节点
+    fn inode(&self) -> Arc<dyn VfsInode>;
+    // 读取目录内容（默认未实现）
+    fn readdir(&self, _buf: &mut [u8]) -> AlienResult<usize> {
+        Err(LinuxErrno::ENOSYS) // 返回未实现错误
+    }
+    // 截断文件到指定长度（默认未实现）
+    fn truncate(&self, _len: u64) -> AlienResult<()> {
+        Err(LinuxErrno::ENOSYS) // 返回未实现错误
+    }
+    // 判断文件是否可读
+    fn is_readable(&self) -> bool;
+    // 判断文件是否可写
+    fn is_writable(&self) -> bool;
+    // 判断文件是否处于追加模式
+    fn is_append(&self) -> bool;
+    // 处理文件事件轮询（默认未实现，直接 panic）
+    fn poll(&self, _event: PollEvents) -> AlienResult<PollEvents> {
+        panic!("poll is not implemented for :{:?}", self)
+    }
+}
+```
+### 2024/1/11
 之前的dbfs是通过VFS先调用DBFS的通用read/write接口，然后DBFS会调用jammdb的put/get操作，获取数据对应的键值对；
 
 实现了DBFS的put/get接口，但是还没有实现VFS的接口，需要先实现VFS的接口，再实现DBFS的接口。
