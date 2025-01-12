@@ -1,9 +1,11 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
-### 2024/1/12
-基本思路
-定义 DBFS 接口： 在 DBFS 中，定义通用的 read 和 write 接口来与数据库交互。这些接口会处理实际的数据库操作（例如读取/写入记录、查询等）。
+通过以上实现，VFS 层完成了以下工作：
 
-实现 VFS 调用 DBFS 接口： VFS 中的 read 和 write 操作会首先通过 FUSE 接口传递给用户空间的 DBFS 文件系统，然后由 DBFS 执行相应的数据库操作。
+- 使用 FUSE 监听操作系统的文件操作请求。
+
+- 将请求映射为 DBFS 的 read、write、create 等接口调用。
+
+- 通过 DBFS 完成实际的数据操作，而无需修改 DBFS 本身的逻辑。
 
 下面是Alien的read/write接口，在subsystems/vfs/src/kfile.rs
 ```
