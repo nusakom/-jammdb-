@@ -1,4 +1,10 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/1/12
+之前的dbfs是通过VFS先调用DBFS的通用read/write接口，然后DBFS会调用jammdb的put/get操作，获取数据对应的键值对；
+
+实现了DBFS的put/get接口，但是还没有实现VFS的接口，需要先实现VFS的接口，再实现DBFS的接口。
+
+让alien适配fuse和接口，按照这个接口连接dbfs，启动顺序是先vfs到fuse再到dbfs。
 ### 2024/1/8
 alien和dbfs可以单独的运行，想把dbfs移植到操作系统用户态上。
 
