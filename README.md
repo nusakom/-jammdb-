@@ -1,4 +1,14 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2024/1/20
+重新布置环境解决了一些问题
+![alt text](82033f3869891cc11060ef4ffc7c755.png)
+把dbfs连接到vfs上面，但是还是遇到dbfs一个问题，上次是通过
+```
+cargo run --release --example fuse -- --allow-other --auto-unmount --mount-point ./bench/dbfs
+```
+没有解决掉的，所以没有理这个，但是这次又出来了明天再来解决一下
+![alt text](image-4.png)
+### 2024/1/16
 通过以上实现，VFS 层完成了以下工作：
 
 - 使用 FUSE 监听操作系统的文件操作请求。
