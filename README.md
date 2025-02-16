@@ -1,4 +1,71 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2025/2/17
+学习RVFS的demo：
+1.注册 dbfs 文件系统：
+
+    register_all_fs() 函数将 dbfs 注册到全局 FS 映射中，供后续使用。
+2.初始化 dbfs 根目录：
+
+    init_dbfs() 获取 dbfs 文件系统的根目录，并创建一个 VfsPath 以便访问。
+3.创建 /data 目录：
+
+    通过 create() 方法在 dbfs 上创建 data 目录。
+4.创建 log.txt 并写入数据：
+
+    通过 open() 方法创建 log.txt 文件，并使用 write_at() 方法写入内容。
+5.挂载 /data 目录：
+
+    通过 mount() 方法将 data 目录挂载到 dbfs 上，以支持访问。
+6.输出成功信息：
+
+    println!() 确保执行成功后提供用户反馈。
+
+这样，整个 dbfs 文件系统的初始化、文件与目录操作、挂载等流程就完整实现了
+```
+use std::sync::{Arc, Mutex};
+use vfs::{VfsNodeType, VfsInodeMode, VfsPath};
+use dbfs::{DbFs, DbFsProviderImpl};
+
+lazy_static! {
+    static ref FS: Mutex<HashMap<String, Arc<dyn VfsFsType>>> = Mutex::new(HashMap::new());
+}
+
+fn register_all_fs() {
+    let dbfs = Arc::new(DbFs::<_, Mutex<()>>::new(DbFsProviderImpl));
+    FS.lock().unwrap().insert("dbfs".to_string(), dbfs);
+    println!("Registered dbfs");
+}
+
+fn init_dbfs(fs: Arc<dyn VfsFsType>) -> Result<Arc<VfsPath>, &'static str> {
+    let root = fs.root()?;
+    Ok(Arc::new(VfsPath::new(root.clone(), root.clone())))
+}
+
+fn main() -> Result<(), &'static str> {
+    // 注册 dbfs
+    register_all_fs();
+    
+    // 初始化 dbfs 文件系统
+    let dbfs_root = init_dbfs(FS.lock().unwrap().get("dbfs").unwrap().clone())?;
+    
+    // 创建 /data 目录
+    dbfs_root.inode()?.create("data", VfsNodeType::Dir, "rwxr-xr-x".into(), None)?;
+    
+    // 创建 dbfs 虚拟路径
+    let dbfs_path = VfsPath::new(dbfs_root.clone(), dbfs_root.clone());
+    
+    // 创建 log.txt 文件并写入数据
+    let file_path = dbfs_path.join("log.txt")?;
+    let log_file = file_path.open(Some(VfsInodeMode::from_bits_truncate(0o777) | VfsInodeMode::FILE))?;
+    log_file.inode()?.write_at(0, b"DBFS log entry")?;
+    
+    // 挂载 /data 目录
+    dbfs_path.join("data")?.mount(dbfs_root, 0)?;
+    
+    println!("DBFS setup completed successfully");
+    Ok(())
+}
+```
 ### 2025/2/16
 基于 SQLite VFS (Virtual File System) 的自定义存储后端，使用 JammDB 作为底层数据库，并支持异步操作
 
