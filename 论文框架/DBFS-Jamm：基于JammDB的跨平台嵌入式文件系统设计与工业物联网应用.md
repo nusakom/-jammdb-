@@ -1,7 +1,3 @@
-以下是符合JOSS、IEEE Transactions和ACM TODS期刊要求的中文版IMRAD结构SCI论文大纲：
-
----
-
 ### **标题**  
 DBFS-Jamm：基于JammDB的跨平台嵌入式文件系统设计与工业物联网应用
 
@@ -201,7 +197,7 @@ cargo build --release --features macos
 3. **可扩展性**：附录支持快速补充工业案例和第三方审计报告  
 4. **跨期刊适配**：通过模块化设计满足不同期刊格式要求  
 
-建议投稿前补充：  
+补充：  
 - 附录D：JammDB事务原子性的形式化证明  
 - 附录E：混合缓存策略收敛性分析（数学推导）  
 - 附录F：第三方工具（如fio/iozone）的交叉验证结果
