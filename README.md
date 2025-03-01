@@ -1,4 +1,6 @@
 # -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
+### 2025/3/1
+确认数据库文件系统论文的框架
 ### 2025/2/28
 在论文框架下面，写一个大致的方向：From DBFS to KVFS: A Comparative Study of Embedded Key-Value Stores for Lightweight Database-Backed File Systems.md
 
