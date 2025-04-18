@@ -1,6 +1,17 @@
-# -基于 jammdb 数据库的高性能、高可靠的异步文件系统-
-### 2025/3/3
+# -基于 jammdb 数据库的高性能、高可靠的异步文件系统- 
+### 2025/4/19
+想起来目前我维护的dbfs2需要fuse3，可以把user_allow_other取消注释，就是把
+```
+#user_allow_other
+```
+前面的#去掉可以让各个版本fuse正常运行
 
+补充复现遇到文档并且成功提交：https://github.com/nusakom/dbfs2/blob/main/doc/%E5%A4%8D%E7%8E%B0%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98.md
+![alt text](<doc/image copy.png>)
+### 2025/4/18
+向陈林峰反馈自动化测试脚本make prefile和原文件的Makefile有出入，应该改为make pre_file才能正常运行
+
+mdtest工具需要在ior官方仓库里面，这个是一起维护的
 ### 2025/3/2
 为什么提出数据库文件系统
 
